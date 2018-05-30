@@ -1,4 +1,4 @@
-TRUNCATE TABLE doarni.new_kits_to_track CONTINUE IDENTITY RESTRICT;
+DROP TABLE doarni.new_kits_to_track;
 CREATE TABLE doarni.new_kits_to_track
 (
     kit_product_number VARCHAR(128) NOT NULL,

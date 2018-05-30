@@ -26,12 +26,26 @@ def load_query_from_file(file, *args):
             return q.format(*args)
         return q
 
+def remove_duplicates(data, index=0):
+    values = []
+    n_data = []
+    for row in data:
+        if row[index] not in values:
+            values.append(row[index])
+            n_data.append(row)
+        else:
+            pass
+    return n_data
 
-def f_results(cur, file, *args):
+def f_results(cur, file, *args, index=None):
     fd = []
     data = cur.execute(load_query_from_file(file, *args))
     headers = tuple(i[0] for i in cur.description)
-    results = [row for row in data]
+    results = []
+    if index is None:
+        results = [row for row in data]
+    else:
+        results = remove_duplicates([row for row in data], index=9)
     for row in results:
         fd.append(
             {i[0]: i[1] for i in list(zip(headers, row))}
@@ -39,7 +53,7 @@ def f_results(cur, file, *args):
     return headers, results, fd
 
 
-def insert_into_postgres_table(cursor, table_name, table_headers, data, truncate=False):
+def insert_into_postgres_table(connection, cursor, table_name, table_headers, data, truncate=False):
     print('Inserting {} rows into table [{}]'.format(str(len(data)), table_name))
 
     if truncate:
@@ -64,6 +78,8 @@ def insert_into_postgres_table(cursor, table_name, table_headers, data, truncate
         else:
             print(stmt)
             cursor.execute('RELEASE SAVEPOINT sp1')
+
+    connection.commit()
 
 
 def update_new_kit_data_file(new_kit_file, json_file):
@@ -106,11 +122,7 @@ def update_new_kit_data_file(new_kit_file, json_file):
     return j_kits
 
 
-if __name__ == '__main__':
-
-    POSTGRES_CURSOR.execute(load_query_from_file('POSTGRES_CREATE_KIT_TRACKER_TABLE.sql'))
-    POSTGRES_CURSOR.execute(load_query_from_file('POSTGRES_CREATE_NEW_KITS_TABLE.sql'))
-
+def main():
     new_kit_data = update_new_kit_data_file('3DAY_NEW_KIT_STOCK.TXT', '3DAY_NEW_KIT_STOCK.json')
 
     for kit, serials in new_kit_data.items():
@@ -121,6 +133,7 @@ if __name__ == '__main__':
         )
 
         insert_into_postgres_table(
+            POSTGRES_CONNECTION,
             POSTGRES_CURSOR,
             KITS_TO_TRACK_TABLE,
             nki_headers, nki_results
@@ -129,9 +142,14 @@ if __name__ == '__main__':
     ktr_headers, ktr_results, ktr_f_data = f_results(ORACLE_CURSOR, 'ORACLE_KIT_TRACKER.sql')
 
     insert_into_postgres_table(
+        POSTGRES_CONNECTION,
         POSTGRES_CURSOR,
         KIT_PROGRESS_TABLE,
         ktr_headers, ktr_results,
         truncate=True
     )
 
+
+if __name__ == '__main__':
+
+    main()

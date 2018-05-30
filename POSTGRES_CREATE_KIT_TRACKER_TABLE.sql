@@ -1,4 +1,4 @@
-TRUNCATE TABLE doarni.new_kit_progress_tracker CONTINUE IDENTITY RESTRICT;
+DROP TABLE doarni.new_kit_progress_tracker;
 CREATE TABLE doarni.new_kit_progress_tracker
 (
     kit_barcode VARCHAR(128) NOT NULL,
