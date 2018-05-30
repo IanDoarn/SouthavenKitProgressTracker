@@ -3,3 +3,5 @@ PORSTGRES_CONNECTION_STRING = "dbname=postgres user=doarni host=vsbslgprd01.zmr.
 NEW_KIT_REGEX_PATTERN = r"^([\d\w-]*)(\s{3})(serials) ([\d,]*)$"
 KITS_TO_TRACK_TABLE = 'doarni.new_kits_to_track'
 KIT_PROGRESS_TABLE = 'doarni.new_kit_progress_tracker'
+
+TRUNCATE_TABLE = lambda x: r"TRUNCATE TABLE {} CONTINUE IDENTITY RESTRICT;".format(x)

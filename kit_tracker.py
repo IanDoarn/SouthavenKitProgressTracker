@@ -8,7 +8,8 @@ from settings import \
     PORSTGRES_CONNECTION_STRING, \
     NEW_KIT_REGEX_PATTERN, \
     KITS_TO_TRACK_TABLE, \
-    KIT_PROGRESS_TABLE
+    KIT_PROGRESS_TABLE, \
+    TRUNCATE_TABLE
 
 
 ORACLE_CONNECTION = cx_Oracle.connect(ORACLE_CONNECTION_STRING)
@@ -17,7 +18,7 @@ POSTGRES_CONNECTION = psycopg2.connect(PORSTGRES_CONNECTION_STRING)
 ORACLE_CURSOR = ORACLE_CONNECTION.cursor()
 POSTGRES_CURSOR = POSTGRES_CONNECTION.cursor()
 
-TRUNCATE_TABLE = lambda x: r"TRUNCATE TABLE {} CONTINUE IDENTITY RESTRICT;".format(x)
+
 
 def load_query_from_file(file, *args):
     with open(file, 'r')as qf:
