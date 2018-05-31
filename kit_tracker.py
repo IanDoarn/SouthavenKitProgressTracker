@@ -49,7 +49,7 @@ class Application:
             if enum == Verbosity.GENERAL and Verbosity.GENERAL.value <= self.max_verbose:
                 print(Fore.LIGHTWHITE_EX + str(text))
             elif enum == Verbosity.INFO and Verbosity.INFO.value <= self.max_verbose:
-                print(Fore.BLUE + str(text))
+                print(Fore.LIGHTCYAN_EX + str(text))
             elif enum == Verbosity.WARNING and Verbosity.WARNING.value <= self.max_verbose:
                 print(Fore.LIGHTYELLOW_EX + str(text))
             elif enum == Verbosity.ERROR and Verbosity.ERROR.value <= self.max_verbose:
@@ -315,10 +315,6 @@ class Application:
         )
 
         self.__verbose_print('Complete.', enum=Verbosity.OTHER, color=Fore.LIGHTGREEN_EX)
-
-        self.__verbose_print('Shutting down script.', enum=Verbosity.WARNING)
-        self.__POSTGRES_CONNECTION.close()
-        self.__ORACLE_CONNECTION.close()
 
 
 if __name__ == '__main__':
