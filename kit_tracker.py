@@ -44,12 +44,12 @@ class Application:
         if auto_connect:
             self.connect()
 
-    def __verbose_print(self, text, enum=Verbosity.GENERAL, color=Fore.WHITE):
+    def __verbose_print(self, text, enum=Verbosity.GENERAL, color=Fore.LIGHTWHITE_EX):
         if self.verbose:
             if enum == Verbosity.GENERAL and Verbosity.GENERAL.value <= self.max_verbose:
                 print(Fore.LIGHTWHITE_EX + str(text))
             elif enum == Verbosity.INFO and Verbosity.INFO.value <= self.max_verbose:
-                print(Fore.LIGHTBLUE_EX + str(text))
+                print(Fore.BLUE + str(text))
             elif enum == Verbosity.WARNING and Verbosity.WARNING.value <= self.max_verbose:
                 print(Fore.LIGHTYELLOW_EX + str(text))
             elif enum == Verbosity.ERROR and Verbosity.ERROR.value <= self.max_verbose:
