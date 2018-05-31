@@ -285,7 +285,14 @@ class Application:
         self.__verbose_print('Collecting data on kits from new kit data file '
                              'and uploading to postgres.', enum=Verbosity.INFO)
 
+        k_kits = []
+        k_serials = []
+
         for kit, serials in new_kit_data.items():
+
+            k_kits.append(kit)
+            k_serials.extend(serials)
+
             nki_headers, nki_results, _ = self.__f_results(
                 self.__ORACLE_CURSOR,
                 'ORACLE_KIT_INFORMATION.sql',
@@ -302,7 +309,12 @@ class Application:
         self.__verbose_print('Complete.', enum=Verbosity.OTHER, color=Fore.LIGHTGREEN_EX)
         self.__verbose_print('Building kit tracker data from oracle', enum=Verbosity.INFO)
 
-        ktr_headers, ktr_results, ktr_f_data = self.__f_results(self.__ORACLE_CURSOR, 'ORACLE_KIT_TRACKER.sql')
+        ktr_headers, ktr_results, ktr_f_data = self.__f_results(
+            self.__ORACLE_CURSOR,
+            'ORACLE_KIT_TRACKER.sql',
+            str(tuple(sorted(set(k_kits)))),
+            str(tuple(sorted(set(k_serials))))
+        )
 
         self.__verbose_print('Uploading new kit tracker data to postgres', enum=Verbosity.INFO)
 
