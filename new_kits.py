@@ -1,10 +1,7 @@
 import xlsxwriter
 import copy
 import json
-import os
 import re
-
-os.chdir('C:\\Users\\doarni\\Desktop')
 
 XLSX_FILE = 'NEW_KIT_STOCK_TRACKER.xlsx'
 FILE = '3DAY_NEW_KIT_STOCK.TXT'
